@@ -1,1 +1,25 @@
-
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./knowledge:/app/knowledge
+      - ./faiss_index:/app/faiss_index
+      - ./brand_core:/app/brand_core
+    env_file:
+      - .env
+    restart: unless-stopped
+  admin:
+    build: .
+    command: streamlit run src/admin/admin.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./knowledge:/app/knowledge
+      - ./faiss_index:/app/faiss_index
+      - ./brand_core:/app/brand_core
+    env_file:
+      - .env
+    restart: unless-stopped
