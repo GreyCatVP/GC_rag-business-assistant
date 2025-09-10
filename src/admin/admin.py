@@ -1,5 +1,8 @@
 import streamlit as st
 from core.rag_engine import get_catalog, get_logs
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 st.set_page_config(page_title="Admin Panel", layout="wide")
 st.title("🔧 RAG Business Assistant — Admin")
