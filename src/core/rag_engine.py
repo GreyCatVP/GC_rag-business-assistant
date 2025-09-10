@@ -26,3 +26,23 @@ def search_docs(query: str, k: int = 3):
     db = FAISS.load_local(str(FAISS_PATH), embeddings, allow_dangerous_deserialization=True)
     docs = db.similarity_search(query, k=k)
     return [{"text": d.page_content, "source": d.metadata["source"]} for d in docs]
+
+def get_catalog() -> str:
+    """Возвращает JSON-каталог товаров (заглушка)"""
+    from pathlib import Path
+    import json
+    catalog_path = Path("shop_data/catalog.json")
+    if not catalog_path.exists():
+        return "Каталог пуст."
+    with catalog_path.open(encoding="utf-8") as f:
+        items = json.load(f)
+    return "\n".join(f"{i['name']} — {i['price']}₽" for i in items)
+
+def get_logs(limit: int = 50) -> list[str]:
+    """Возвращает последние N строк логов"""
+    from pathlib import Path
+    log_path = Path("logs/rag.log")
+    if not log_path.exists():
+        return ["Логов пока нет."]
+    lines = log_path.read_text(encoding="utf-8").strip().splitlines()
+    return lines[-limit:]
